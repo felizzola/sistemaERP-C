@@ -1,0 +1,41 @@
+﻿@model IEnumerable<BENT1C.Grupo5.Entidades.Gasto>
+
+@{
+    ViewData["Title"] = "Lista de Gastos por Empleados";
+}
+
+<div class="container text-center">
+    <h1><u>Listado Gastos</u></h1>
+</div>
+
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+
+        <div class="col-sm-4">
+            <div class="card m-1">
+                <div class="card-body">
+                    <h5 class="card-title"> Monto: @Html.DisplayFor(modelItem => item.Monto)</h5>
+                    @if ((User.IsInRole(nameof(Rol.Administrador))) || ((User.IsInRole(nameof(Rol.Rrhh)))))
+                    {
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                    @Html.DisplayFor(modelItem => item.Empleado.Apellido)
+                </h5>
+                    }
+                    <p> @Html.DisplayFor(modelItem => item.CentroDeCosto.Gerencia.Nombre)</p>
+                    <p>  @Html.DisplayFor(modelItem => item.CentroDeCosto.Nombre)</p>
+                    <p> @Html.DisplayFor(modelItem => item.Descripcion)</p>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+<div class="container text-center">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Volver</a>
+</div>

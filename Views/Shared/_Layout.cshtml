@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BENT1C.Grupo5</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-select/css/bootstrap-select.css" />
+    <link rel="stylesheet" href="~/lib/alertifyjs/css/alertify.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body style="background:#fff">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow @*mb-4*@ py-2 table-primary">
+                <div class="container">
+                    @if ((User.IsInRole(nameof(Rol.Administrador))) || ((User.IsInRole(nameof(Rol.Rrhh)))))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            Inicio
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                            <ul class="navbar-nav flex-grow-1">
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="CentroDeCostos" asp-action="Index">Centro de costos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Gastos" asp-action="Index">Gastos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Gerencias" asp-action="Index">Gerencias</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Imagenes" asp-action="Index">Imágenes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Posiciones" asp-action="Index">Posiciones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Telefonos" asp-action="Index">Teléfonos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="TipoTelefonos" asp-action="Index">Tipos de teléfono</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    }
+                    @if ((User.IsInRole(nameof(Rol.Empleado))))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            Inicio
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    }
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var foto = User.FindFirstValue(nameof(BENT1C.Grupo5.Entidades.Empleado.Foto));
+
+                            <li class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="menuOpciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bienvenido @User.FindFirstValue(ClaimTypes.GivenName) <span class="caret ml-1"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+
+                                    @if ((User.IsInRole(nameof(Rol.Empleado))))
+                                    {
+                                        <li>
+                                            <form id="perfilForm" asp-action="Details" asp-controller="Empleados" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                                                <button class="text-dark dropdown-item">Mi Perfil</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form id="gastosForm" asp-action="Index" asp-controller="Gastos" asp-route-empleadoId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                                                <button class="text-dark dropdown-item">Mis Gastos</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form id="telefonosForm" asp-controller="Telefonos" asp-action="Index" asp-route-empleadoId="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                                                <button class="text-dark dropdown-item">Mis Teléfonos</button>
+                                            </form>
+                                        </li>
+                                        <hr />
+                                        <li>
+                                            <form id="empleadosForm" asp-controller="Empleados" asp-action="Index">
+                                                <button class="text-dark dropdown-item">Empleados</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form id="imagenesForm" asp-controller="Imagenes" asp-action="Index">
+                                                <button class="text-dark dropdown-item">Imagenes</button>
+                                            </form>
+                                        </li>
+                                        <hr />
+                                    }
+
+                                    <li>
+                                        <form id="logoutForm" method="post" asp-controller="Accesos" asp-action="Salir">
+                                            <button type="submit" class="dropdown-item">
+                                                Salir
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </nav>
+
+        </header>
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted ">
+        <div class="container">
+            &copy; 2020 - BENT1C.Grupo5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/i18n/defaults-es_ES.js"></script>
+    <script src="~/lib/alertifyjs/alertify.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

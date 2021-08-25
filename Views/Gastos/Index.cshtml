@@ -1,0 +1,82 @@
+﻿@model IEnumerable<BENT1C.Grupo5.Entidades.Gasto>
+
+@{
+    string errorMessage = TempData["Error"] as string;
+    var hayError = !string.IsNullOrWhiteSpace(errorMessage);
+    ViewData["Title"] = "Index";
+}
+
+<h1>Gastos</h1>
+
+<p>
+    @if (User.IsInRole(nameof(Rol.Empleado)) && (User.Identity.IsAuthenticated))
+    {
+        <a asp-action="Create" asp-route-empleadoId="@User.FindFirstValue(ClaimTypes.NameIdentifier)" class="btn btn-outline-info">Cargar Gasto</a>
+    }
+    else
+    {
+        <a asp-action="Create" class="btn btn-outline-info">Cargar Gasto</a>
+    }
+</p>
+<table class="table table-hover rounded" style="background-color:#ebf2fa">
+    <thead class="table-borderless th">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CentroDeCosto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empleado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Monto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CentroDeCosto.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                    @Html.DisplayFor(modelItem => item.Empleado.Apellido)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Detalles</a>
+                    @if (User.IsInRole(nameof(Rol.Administrador)) && (User.Identity.IsAuthenticated))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (hayError)
+{
+    @section Scripts {
+        <script>
+            alertify.error('@errorMessage');
+        </script>
+    }
+}

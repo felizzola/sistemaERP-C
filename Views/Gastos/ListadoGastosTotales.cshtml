@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Gerencia>
+
+@{
+    ViewData["Title"] = "Lista de Gastos Totales";
+    var costosTotales = ViewBag.GastosTotales as List<CostoTotalViewModel>;
+}
+
+<div class="container text-center">
+    <h1><u>Listado Gastos Totales</u></h1>
+</div>
+
+
+<div class="row">
+
+    @foreach (var gerencia in Model)
+    {
+        var centrosDeCostoDeGerencia = gerencia.CentroDeCostos.Select(x => x.Id);
+        var costoTotal = costosTotales
+            .Where(costo => centrosDeCostoDeGerencia.Contains(costo.CentroDeCostoId))
+            .Sum(costo => costo.Suma);
+
+        <div class="col-sm-4">
+            <div class="card m-1">
+                <div class="card-body">
+                    <h5 class="card-title"> @gerencia.Nombre</h5>
+                    <br />
+                    Gasto total de $ @costoTotal
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+<div class="container text-center">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Volver</a>
+</div>

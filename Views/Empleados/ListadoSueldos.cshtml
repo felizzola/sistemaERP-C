@@ -1,0 +1,34 @@
+﻿@model IEnumerable<BENT1C.Grupo5.Entidades.Empleado>
+
+@{
+    ViewData["Title"] = "Lista de Sueldos por Empleados";
+}
+
+<div class="container text-center">
+    <h1><u>Listado Sueldos</u></h1>
+</div>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+
+        <div class="col-sm-4">
+            <div class="card text-center" style="width: 18rem;">
+                <img class="card-img-top" src="@Url.Content(item.Foto.Url)" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Nombre)</h5>
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Apellido)</h5>
+                    <h5 class="card-text"> @Html.DisplayFor(modelItem => item.Posicion.Nombre).</h5>
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Posicion.Sueldo)</h5>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+<div class="container text-center">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Volver</a>
+</div>
